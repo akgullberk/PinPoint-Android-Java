@@ -1,7 +1,12 @@
 package com.example.pinpoint;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Context;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,9 +40,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        LocationManager locationManager =(LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        LocationListener locationListener = new LocationListener() {
+            @Override
+            public void onLocationChanged(@NonNull Location location) {
+                System.out.println("location: "+location.toString());
+            }
+
+        };
+
         // Add a marker in Sydney and move the camera
-        LatLng latLng = new LatLng(47.5269545,121.8123382);
+        LatLng latLng = new LatLng(42.9628054,17.1217439);
         mMap.addMarker(new MarkerOptions().position(latLng).title("Berk"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,5));
     }
 }
