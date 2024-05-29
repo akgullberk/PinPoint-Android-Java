@@ -11,6 +11,7 @@ import androidx.fragment.app.FragmentActivity;
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -35,6 +36,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     ActivityResultLauncher<String> permissionLauncher;
     LocationManager locationManager;
     LocationListener locationListener;
+    SharedPreferences  sharedPreferences;
+    boolean info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         registerLauncher();
+
+        sharedPreferences = this.getSharedPreferences("package com.example.pinpoint",MODE_PRIVATE);
+        info = false;
     }
 
 
@@ -60,7 +66,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
          locationListener = new LocationListener() {
             @Override
             public void onLocationChanged(@NonNull Location location) {
-                System.out.println("location: "+location.toString());
+
+
+                info = sharedPreferences.getBoolean("info",false);
+
+                if(!info){
+                    LatLng userLocation = new LatLng(location.getLatitude(),location.getLongitude());
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,15));
+                    sharedPreferences.edit().putBoolean("info",true).apply();
+                }
+
+
+
             }
 
         };
@@ -79,14 +96,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
            }
         }else{
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
+
+
+            Location lastlocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            if(lastlocation != null){
+                LatLng lastUserLocation = new LatLng(lastlocation.getLatitude(),lastlocation.getLongitude());
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,15));
+            }
+
+            mMap.setMyLocationEnabled(true);
+
+
         }
 
 
-
-        // Add a marker in Sydney and move the camera
-        LatLng latLng = new LatLng(42.9628054,17.1217439);
-        mMap.addMarker(new MarkerOptions().position(latLng).title("Berk"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,5));
     }
 
     private void registerLauncher(){
@@ -97,6 +120,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if(ContextCompat.checkSelfPermission(MapsActivity.this,Manifest.permission.ACCESS_COARSE_LOCATION)==PackageManager.PERMISSION_GRANTED){
                         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);
 
+                        Location lastlocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        if(lastlocation != null){
+                            LatLng lastUserLocation = new LatLng(lastlocation.getLatitude(),lastlocation.getLongitude());
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,15));}
                     }
 
                 }else{
