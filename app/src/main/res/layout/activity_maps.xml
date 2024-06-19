@@ -15,7 +15,7 @@
         map:layout_constraintEnd_toEndOf="parent"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toTopOf="parent"
-        tools:context=".MapsActivity" />
+        tools:context=".view.MapsActivity" />
 
     <EditText
         android:id="@+id/placeNameText"
@@ -40,6 +40,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="100dp"
         android:layout_marginBottom="16dp"
+        android:onClick="save"
         android:text="Save"
         map:layout_constraintBottom_toBottomOf="parent"
         map:layout_constraintEnd_toEndOf="parent"
@@ -55,6 +56,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="16dp"
+        android:onClick="delete"
         android:text="Delete"
         map:layout_constraintBottom_toBottomOf="parent"
         map:layout_constraintEnd_toEndOf="parent"

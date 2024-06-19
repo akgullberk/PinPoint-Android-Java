@@ -1,0 +1,7 @@
+io.reactivex.rxjava3.android.MainThreadDisposable
+io.reactivex.rxjava3.android.plugins.RxAndroidPlugins
+io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+io.reactivex.rxjava3.android.schedulers.AndroidSchedulers$MainHolder
+io.reactivex.rxjava3.android.schedulers.HandlerScheduler
+io.reactivex.rxjava3.android.schedulers.HandlerScheduler$HandlerWorker
+io.reactivex.rxjava3.android.schedulers.HandlerScheduler$ScheduledRunnable

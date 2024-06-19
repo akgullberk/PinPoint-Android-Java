@@ -15,7 +15,7 @@
         android:theme="@style/Theme.PinPoint"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".view.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,7 +39,7 @@
             android:value="AIzaSyAUJZ_I7SkqkrY5-Rn0MtH7xCR1B22AOCs" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".view.MapsActivity"
             android:exported="true"
             android:label="@string/title_activity_maps">
             <intent-filter>
