@@ -43,10 +43,10 @@
         android:text="Save"
         map:layout_constraintBottom_toBottomOf="parent"
         map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="0.675"
+        map:layout_constraintHorizontal_bias="0.057"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toBottomOf="@+id/placeNameText"
-        map:layout_constraintVertical_bias="0.428" />
+        map:layout_constraintVertical_bias="1.0" />
 
     <Button
         android:id="@+id/deleteButton"
@@ -58,7 +58,7 @@
         android:text="Delete"
         map:layout_constraintBottom_toBottomOf="parent"
         map:layout_constraintEnd_toEndOf="parent"
-        map:layout_constraintHorizontal_bias="0.551"
+        map:layout_constraintHorizontal_bias="0.917"
         map:layout_constraintStart_toStartOf="parent"
         map:layout_constraintTop_toBottomOf="@+id/placeNameText"
         map:layout_constraintVertical_bias="0.428" />
