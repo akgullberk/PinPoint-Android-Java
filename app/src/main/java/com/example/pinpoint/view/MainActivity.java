@@ -24,6 +24,7 @@ import com.example.pinpoint.model.Place;
 import com.example.pinpoint.roomdb.PlaceDao;
 import com.example.pinpoint.roomdb.PlaceDatabase;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
@@ -34,41 +35,31 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
-    private CompositeDisposable compositeDisposable = new CompositeDisposable();
-    PlaceDatabase db;
-    PlaceDao placeDao;
-
-
-
-
+    private final CompositeDisposable mDisposable = new CompositeDisposable();
+    ArrayList<Place> places;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         View view = binding.getRoot();
-        EdgeToEdge.enable(this);
         setContentView(view);
 
-        db= Room.databaseBuilder(getApplicationContext(), PlaceDatabase.class,"Places").build();
-        placeDao = db.placeDao();
+        places = new ArrayList<>();
 
-        compositeDisposable.add(placeDao.getAll()
+        PlaceDatabase db = Room.databaseBuilder(getApplicationContext(),
+                PlaceDatabase.class, "Places").allowMainThreadQueries().build();
+
+        PlaceDao placeDao = db.placeDao();
+
+        mDisposable.add(placeDao.getAll()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(MainActivity.this::handleResponse)
-
-        );
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-
+                .subscribe(this::handleResponse));
 
     }
 
-    private void handleResponse(List<Place> placeList){
+    private void handleResponse(List<Place> placeList) {
+
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         PlaceAdapter placeAdapter = new PlaceAdapter(placeList);
         binding.recyclerView.setAdapter(placeAdapter);
@@ -84,8 +75,9 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.add_place){
-            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
+        if(item.getItemId() == R.id.add_place) {
+            Intent intent = new Intent(this,MapsActivity.class);
+            intent.putExtra("info","new");
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
@@ -94,6 +86,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        compositeDisposable.clear();
+        mDisposable.clear();
     }
 }
